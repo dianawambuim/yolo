@@ -1,21 +1,29 @@
 version: '3'
 services:
-  frontend: 
+  frontend:
     build:
       context: client
-      dockfile: Dockerfile
-    depends_on: 
+      dockerfile: Dockerfile
+    depends_on:
       - backend
     stdin_open: true
     ports:
       - 3000:3000
-
   backend:
     build:
       context: backend
-      dockfile: Dockerfile
-    enviroment:
-      MONGODB__URI: ''
+      dockerfile: Dockerfile
+    environment:
+      MONGODB_URI: 'mongodb://diana:diana@localhost:27017'
       PORT: 5000
     ports:
       - 5000:5000
+    depends_on:
+      - mongo
+  mongo:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: diana
+      MONGO_INITDB_ROOT_PASSWORD: diana
+    ports:
+      - 27017:27017
